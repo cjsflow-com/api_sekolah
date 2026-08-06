@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class TeachingAssignment extends Model
 {
@@ -69,5 +70,17 @@ class TeachingAssignment extends Model
     public function reportCardDetails(): HasMany
     {
         return $this->hasMany(ReportCardDetail::class);
+    }
+
+    public function gradeComponents(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            GradeComponent::class,
+            'teaching_grade_components',
+            'teaching_assignment_id',
+            'grade_component_id'
+        )
+            ->withPivot('weight')
+            ->withTimestamps();
     }
 }
