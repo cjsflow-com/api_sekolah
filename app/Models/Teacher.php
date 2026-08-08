@@ -80,6 +80,17 @@ class Teacher extends Authenticatable
         return $query->where('is_active', true);
     }
 
+    public function scopeSearch(Builder $query, ?string $keyword): Builder{
+        return $query->when(
+            filled($keyword),
+            fn (Builder $query) => $query->where(function (Builder $query) use ($keyword) {
+                $query->where('name', 'like', "%{$keyword}%")
+                    ->orWhere('email', 'like', "%{$keyword}%")
+                    ->orWhere('identity_number', 'like', "%{$keyword}%");
+            })
+        );
+    }
+
     /**
      * Penugasan mengajar milik guru.
      */
@@ -95,6 +106,22 @@ class Teacher extends Authenticatable
     {
         return $this->hasMany(
             ClassAttendance::class,
+            'recorded_by'
+        );
+    }
+
+    public function homeroomClasses(): HasMany
+    {
+        return $this->hasMany(
+            SchoolClass::class,
+            'homeroom_teacher_id'
+        );
+    }
+
+    public function recordedGrades(): HasMany
+    {
+        return $this->hasMany(
+            Grade::class,
             'recorded_by'
         );
     }

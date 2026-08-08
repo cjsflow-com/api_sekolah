@@ -41,7 +41,6 @@ class Student extends Authenticatable
         'parent_phone',
         'status',
         'avatar',
-        'last_login_at',
     ];
 
     /**
@@ -72,6 +71,50 @@ class Student extends Authenticatable
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('status', self::STATUS_ACTIVE);
+    }
+
+    /**
+     * Search student.
+     */
+    public function scopeSearch(
+        Builder $query,
+        ?string $search
+    ): Builder {
+        return $query->when(
+            filled($search),
+            function (Builder $query) use ($search): void {
+                $query->where(
+                    function (Builder $query) use ($search): void {
+                        $query
+                            ->where(
+                                'name',
+                                'like',
+                                "%{$search}%"
+                            )
+                            ->orWhere(
+                                'nis',
+                                'like',
+                                "%{$search}%"
+                            )
+                            ->orWhere(
+                                'nisn',
+                                'like',
+                                "%{$search}%"
+                            )
+                            ->orWhere(
+                                'email',
+                                'like',
+                                "%{$search}%"
+                            )
+                            ->orWhere(
+                                'phone',
+                                'like',
+                                "%{$search}%"
+                            );
+                    }
+                );
+            }
+        );
     }
 
     /**

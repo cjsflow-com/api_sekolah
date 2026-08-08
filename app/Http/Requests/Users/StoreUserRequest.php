@@ -18,7 +18,7 @@ class StoreUserRequest extends FormRequest
         return true;
     }
 
-    public function prepareValidation():void
+    public function prepareForValidation():void
     {
         $this->merge([
             'name' => trim((string) $this->input('name')),

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\UserController;
+use App\Http\Controllers\Api\V1\TeacherController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function (): void {
@@ -21,6 +22,13 @@ Route::prefix('v1')->group(function (): void {
     | Protected routes
     |--------------------------------------------------------------------------
     */
+
+    Route::middleware('auth:sanctum')->group(function (): void {
+        Route::apiResource(
+            'teachers',
+            TeacherController::class
+        );
+    });
 
     Route::middleware('auth:sanctum')
         ->group(function (): void {
@@ -44,4 +52,6 @@ Route::prefix('v1')->group(function (): void {
                 UserController::class
             );
         });
+
+
 });

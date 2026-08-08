@@ -9,45 +9,34 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
     //
-
      public function login(
         LoginRequest $request
     ): JsonResponse {
-        $credentials = $request->validated();
+        $validated = $request->validated();
 
-        $user = User::query()
-            ->where('email', $credentials['email'])
-            ->first();
+        $credentials = [
+            'email' => $validated['email'],
+            'password' => $validated['password'],
+            'is_active' => true,
+        ];
 
-        if (
-            ! $user
-            || ! Hash::check(
-                $credentials['password'],
-                $user->password
-            )
-        ) {
+        if (! Auth::guard('web')->attempt($credentials)) {
             return response()->json([
-                'message' => 'Email atau password tidak sesuai.',
+                'message' => 'Email atau password salah.',
             ], 422);
         }
 
-        if (! $user->is_active) {
-            return response()->json([
-                'message' => 'Akun Anda sedang tidak aktif.',
-            ], 403);
-        }
+        $request->session()->regenerate();
 
-        $deviceName = $credentials['device_name']
-            ?? 'api-client';
+        $user = Auth::guard('web')->user();
 
-        $token = $user->createToken(
-            name: $deviceName,
-            abilities: ['*']
-        )->plainTextToken;
+        $user->update([
+            'last_login_at' => now(),
+        ]);
 
         $user->load([
             'role.permissions',
@@ -55,16 +44,11 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => 'Login berhasil.',
-
             'data' => [
                 'user' => new UserResource($user),
-
-                'auth' => [
-                    'token_type' => 'Bearer',
-                    'access_token' => $token,
-                ],
-            ],
+            ]
         ]);
+
     }
 
     // Mengambil user yang sedang login
