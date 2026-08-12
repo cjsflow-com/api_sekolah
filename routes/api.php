@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\StudentAuthController;
+use App\Http\Controllers\Api\V1\StudentController;
+use App\Http\Controllers\Api\V1\TeacherAuthController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\TeacherController;
 use Illuminate\Support\Facades\Route;
@@ -17,18 +20,18 @@ Route::prefix('v1')->group(function (): void {
         [AuthController::class, 'login']
     )->middleware('throttle:5,1');
 
+    Route::post(
+        'auth/teacher/login',
+        [TeacherAuthController::class,'login']
+    )->middleware('throttle:5,1');
+
+    Route::post('auth/student/login', [StudentAuthController::class, 'login'])->middleware('throttle:5,1');
+
     /*
     |--------------------------------------------------------------------------
     | Protected routes
     |--------------------------------------------------------------------------
     */
-
-    Route::middleware('auth:sanctum')->group(function (): void {
-        Route::apiResource(
-            'teachers',
-            TeacherController::class
-        );
-    });
 
     Route::middleware('auth:sanctum')
         ->group(function (): void {
@@ -45,6 +48,16 @@ Route::prefix('v1')->group(function (): void {
             Route::post(
                 '/auth/logout-all',
                 [AuthController::class, 'logoutAll']
+            );
+
+            Route::apiResource(
+                'teachers',
+                TeacherController::class
+            );
+
+            Route::apiResource(
+                'students',
+                StudentController::class
             );
 
             Route::apiResource(
