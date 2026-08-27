@@ -1,6 +1,12 @@
 <?php
 
+use App\Http\Controllers\Api\FeeTypeController as ApiFeeTypeController;
+use App\Http\Controllers\Api\V1\FeeTypeController;
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\InvoiceController;
+use App\Http\Controllers\Api\V1\PaymentController;
+use App\Http\Controllers\Api\V1\PermissionController;
+use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\V1\StudentAuthController;
 use App\Http\Controllers\Api\V1\StudentController;
 use App\Http\Controllers\Api\V1\TeacherAuthController;
@@ -64,6 +70,26 @@ Route::prefix('v1')->group(function (): void {
                 'users',
                 UserController::class
             );
+
+            
+        Route::get(
+            '/permissions/options',
+            [
+                PermissionController::class,
+                'options',
+            ]
+        );
+
+            Route::apiResource('roles',RoleController::class);
+
+            Route::apiResource('permissions',PermissionController::class);
+
+            
+            Route::apiResource('fee-types',FeeTypeController::class);
+
+            Route::apiResource('invoices', InvoiceController::class);
+
+            Route::apiResource('payments',PaymentController::class);
         });
 
 
