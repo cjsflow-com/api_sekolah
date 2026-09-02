@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\AcademicYearController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\EducationUnitController;
 use App\Http\Controllers\Api\V1\FeeTypeController;
@@ -94,6 +95,8 @@ Route::prefix('v1')->group(function (): void {
             Route::apiResource('education-units', EducationUnitController::class);
 
             Route::apiResource('semesters', SemesterController::class);
+
+            Route::apiResource('academic-years', AcademicYearController::class);
 
             Route::apiResource('school-classes', SchoolClassController::class);
         });
