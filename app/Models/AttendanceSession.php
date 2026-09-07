@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class AttendanceSession extends Model
 {
-    //
     use HasFactory;
 
     protected $fillable = [
@@ -20,12 +22,18 @@ class AttendanceSession extends Model
     {
         return [
             'schedule_id' => 'integer',
+            'meeting_no' => 'integer',
             'meeting_date' => 'date',
         ];
     }
 
-    public function schedule()
+    public function schedule(): BelongsTo
     {
         return $this->belongsTo(Schedule::class);
+    }
+
+    public function classAttendances(): HasMany
+    {
+        return $this->hasMany(ClassAttendance::class);
     }
 }

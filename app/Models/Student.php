@@ -21,6 +21,8 @@ class Student extends Authenticatable
     public const STATUS_GRADUATED = 'graduated';
     public const STATUS_MOVED = 'moved';
     public const STATUS_INACTIVE = 'inactive';
+    public const GENDER_MALE = 1;
+    public const GENDER_FEMALE = 2;
 
     /**
      * Kolom yang boleh diisi melalui create(), update(),

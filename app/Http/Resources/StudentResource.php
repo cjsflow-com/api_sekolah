@@ -61,6 +61,45 @@ class StudentResource extends JsonResource
                     ->url($this->avatar)
                 : null,
 
+            /*
+            |--------------------------------------------------------------------------
+            | Relasi
+            |--------------------------------------------------------------------------
+            */
+
+            'class_attendances' => $this->whenLoaded(
+                'classAttendances'
+            ),
+
+            'report_cards' => $this->whenLoaded(
+                'reportCards'
+            ),
+
+            'invoices' => $this->whenLoaded(
+                'invoices'
+            ),
+
+            /*
+            |--------------------------------------------------------------------------
+            | Counts
+            |--------------------------------------------------------------------------
+            */
+
+            'class_attendances_count' =>
+                $this->whenCounted(
+                    'classAttendances'
+                ),
+
+            'report_cards_count' =>
+                $this->whenCounted(
+                    'reportCards'
+                ),
+
+            'invoices_count' =>
+                $this->whenCounted(
+                    'invoices'
+                ),
+
             'last_login_at' => $this->last_login_at
                 ?->toISOString(),
 

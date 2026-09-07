@@ -49,6 +49,115 @@ class TeacherResource extends JsonResource
 
             'is_active' => $this->is_active,
 
+            /*
+            |--------------------------------------------------------------------------
+            | Status Wali Kelas
+            |--------------------------------------------------------------------------
+            */
+
+            'is_homeroom_teacher' => $this->whenLoaded(
+                'homeroomClasses',
+                fn () => $this->homeroomClasses->isNotEmpty()
+            ),
+
+            /*
+            |--------------------------------------------------------------------------
+            | Kelas yang menjadi tanggung jawab sebagai wali kelas
+            |--------------------------------------------------------------------------
+            */
+
+            'homeroom_classes' => $this->whenLoaded(
+                'homeroomClasses',
+                fn () => $this->homeroomClasses
+                    ->map(
+                        fn ($schoolClass) => [
+                            'id' => $schoolClass->id,
+
+                            'name' => $schoolClass->name,
+
+                            'level' => $schoolClass->level,
+
+                            'capacity' => $schoolClass->capacity,
+
+                            'academic_year_id' =>
+                                $schoolClass->academic_year_id,
+
+                            'academic_year' =>
+                                $schoolClass->relationLoaded(
+                                    'academicYear'
+                                )
+                                    ? [
+                                        'id' =>
+                                            $schoolClass
+                                                ->academicYear
+                                                ?->id,
+
+                                        'name' =>
+                                            $schoolClass
+                                                ->academicYear
+                                                ?->name,
+                                    ]
+                                    : null,
+
+                            'education_unit_id' =>
+                                $schoolClass->education_unit_id,
+
+                            'education_unit' =>
+                                $schoolClass->relationLoaded(
+                                    'educationUnit'
+                                )
+                                    ? [
+                                        'id' =>
+                                            $schoolClass
+                                                ->educationUnit
+                                                ?->id,
+
+                                        'code' =>
+                                            $schoolClass
+                                                ->educationUnit
+                                                ?->code,
+
+                                        'name' =>
+                                            $schoolClass
+                                                ->educationUnit
+                                                ?->name,
+                                    ]
+                                    : null,
+                        ]
+                    )
+                    ->values()
+            ),
+
+            /*
+            |--------------------------------------------------------------------------
+            | Penugasan Mengajar
+            |--------------------------------------------------------------------------
+            */
+
+            'teaching_assignments' => $this->whenLoaded(
+                'teachingAssignments'
+            ),
+
+            /*
+            |--------------------------------------------------------------------------
+            | Absensi kelas yang dicatat guru
+            |--------------------------------------------------------------------------
+            */
+
+            'recorded_class_attendances' => $this->whenLoaded(
+                'recordedClassAttendances'
+            ),
+
+            /*
+            |--------------------------------------------------------------------------
+            | Nilai yang dicatat guru
+            |--------------------------------------------------------------------------
+            */
+
+            'recorded_grades' => $this->whenLoaded(
+                'recordedGrades'
+            ),
+
             'last_login_at' => $this->last_login_at
                 ?->toISOString(),
 

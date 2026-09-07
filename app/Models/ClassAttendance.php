@@ -3,12 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ClassAttendance extends Model
 {
-    //
-
-
     protected $fillable = [
         'attendance_session_id',
         'student_id',
@@ -26,18 +24,25 @@ class ClassAttendance extends Model
         ];
     }
 
-    public function attendanceSession()
+    public function attendanceSession(): BelongsTo
     {
-        return $this->belongsTo(AttendanceSession::class);
+        return $this->belongsTo(
+            AttendanceSession::class
+        );
     }
 
-    public function student()
+    public function student(): BelongsTo
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(
+            Student::class
+        );
     }
 
-    public function recordedBy()
+    public function recordedBy(): BelongsTo
     {
-        return $this->belongsTo(Teacher::class, 'recorded_by');
+        return $this->belongsTo(
+            Teacher::class,
+            'recorded_by'
+        );
     }
 }

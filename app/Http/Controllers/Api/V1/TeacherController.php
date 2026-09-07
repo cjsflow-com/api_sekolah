@@ -54,6 +54,9 @@ class TeacherController extends Controller
         );
 
         $teachers = Teacher::query()
+            ->with([
+                'homeroomClasses:id,name,homeroom_teacher_id',
+            ])
             ->search(
                 $request->query('search')
             )
@@ -144,8 +147,20 @@ class TeacherController extends Controller
      * Detail guru.
      */
     public function show(
-        Teacher $teacher
+    Teacher $teacher
     ): TeacherResource {
+        $teacher->load([
+            'homeroomClasses.academicYear',
+            'homeroomClasses.educationUnit',
+
+            'teachingAssignments.subject',
+            'teachingAssignments.schoolClass',
+            'teachingAssignments.semester',
+
+            'recordedClassAttendances',
+            'recordedGrades',
+        ]);
+
         return new TeacherResource(
             $teacher
         );

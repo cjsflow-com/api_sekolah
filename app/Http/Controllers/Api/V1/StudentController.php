@@ -141,6 +141,15 @@ class StudentController extends Controller
     public function show(
         Student $student
     ): StudentResource {
+        $student->load([
+            'classAttendances',
+            'reportCards',
+            'invoices',
+        ])->loadCount([
+            'classAttendances',
+            'reportCards',
+            'invoices',
+        ]);
         return new StudentResource(
             $student
         );
