@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\AcademicYearController;
 use App\Http\Controllers\Api\V1\AttendanceSessionController;
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\ClassAttendanceController;
 use App\Http\Controllers\Api\V1\ClassRoomController;
 use App\Http\Controllers\Api\V1\EducationUnitController;
 use App\Http\Controllers\Api\V1\FeeTypeController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\Api\V1\PermissionController;
 use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\V1\SchoolClassController;
 use App\Http\Controllers\Api\V1\SemesterController;
+use App\Http\Controllers\Api\V1\StudentAttendanceController;
 use App\Http\Controllers\Api\V1\StudentAuthController;
 use App\Http\Controllers\Api\V1\StudentClassController;
 use App\Http\Controllers\Api\V1\StudentController;
@@ -120,6 +122,12 @@ Route::prefix('v1')->group(function (): void {
             Route::apiResource('grades',GradeController::class);
 
             Route::apiResource('attendance-sessions', AttendanceSessionController::class);
+
+            Route::get('attendance-sessions/{attendanceSession}/attendances', [ClassAttendanceController::class, 'index']);
+
+            Route::put('attendance-sessions/{attendanceSession}/attendances', [ClassAttendanceController::class, 'update']);
+
+            Route::get('students/{student}/attendance-sumarry',[StudentAttendanceController::class, 'show']);
         });
 
 });
