@@ -27,6 +27,11 @@ class RoleResource extends JsonResource
                     $this->whenLoaded('permissions')
                 ),
 
+            'users' =>
+                UserResource::collection(
+                    $this->whenLoaded('users')
+                ),
+
             'users_count' => $this->whenCounted(
                 'users'
             ),

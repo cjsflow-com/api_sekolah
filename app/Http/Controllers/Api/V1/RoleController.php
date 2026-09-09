@@ -134,6 +134,7 @@ class RoleController extends Controller
         Gate::authorize('view',$role);
         $role->load([
             'permissions',
+            'users',
         ]);
 
         $role->loadCount([
